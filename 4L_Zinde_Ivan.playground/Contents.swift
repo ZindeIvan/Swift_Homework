@@ -15,9 +15,11 @@ enum Actions {
     case windowsAction (open : Bool = true)
     //Действие с грузом - cargoValue - количество груза; при указании load в значение True загружаем груз и при False разгружаем
     case cargoAction (cargoValue : Double, load : Bool = true)
-    
+    //Действие с кузовом - при указании liftUp в значение True поднимается кузов и при False опускается
     case trunkAction (liftUp : Bool = true)
+    //Действие с турбо режимом - при указании turnOn в значение True включаем турбо режим и при False выключаем
     case turboAction (turnOn : Bool = true)
+    //Действие с люком - при указании open в значение True открываем люк и при False закрываем
     case hatchAction (open : Bool = true)
     
 }
