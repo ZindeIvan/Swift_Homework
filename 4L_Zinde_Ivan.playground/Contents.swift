@@ -18,6 +18,7 @@ enum Actions {
     
     case trunkAction (liftUp : Bool = true)
     case turboAction (turnOn : Bool = true)
+    case hatchAction (open : Bool = true)
     
 }
 
@@ -44,7 +45,15 @@ class Car {
     //Текущий объем груза в багажнике
     var trunkCurrentCapasity : Double = 0{
         didSet {
-            print("Багажник заполнен на \(trunkCurrentCapasity)")
+            if trunkMaxCapacity == trunkCurrentCapasity{
+                 print("Машина загружена полностью")
+             }
+            else if trunkCurrentCapasity == 0{
+                 print("Машина пустая")
+             }
+            else {
+                print("Машина заполнена на \(trunkCurrentCapasity)")
+            }
         }
     }
 
@@ -68,13 +77,13 @@ class Car {
         case let .cargoAction(cargoValue, load):
             if load {
                 //Проверяем если количество груза привышает максимальный объем выводим ошибку
-                guard self .trunkCurrentCapasity + cargoValue <= trunkMaxCapacity else { ("Такое количество груза не войдет в машину!"); return }
+                guard self .trunkCurrentCapasity + cargoValue <= trunkMaxCapacity else { print("Такое количество груза не войдет в машину!"); return }
 
                 self .trunkCurrentCapasity += cargoValue
             }
             else {
                 //Проверяем если количество груза меньше чем количество которое пытаемся разгрузить и выводим ошибку
-                guard self .trunkCurrentCapasity > cargoValue  else { print("В багажнике нет такого количества груза!"); return}
+                guard self .trunkCurrentCapasity >= cargoValue  else { print("В машине нет такого количества груза!"); return}
 
                 self .trunkCurrentCapasity -= cargoValue
 
@@ -109,33 +118,39 @@ class Car {
     }
 }
 
+//Создадим класс грузовой автомобиль - наследник класса автомобиль
 class TrunkCar : Car {
     
+    //Количество колес
     let wheelsCount : Int
     
-    var trunkLiftedUp : Bool = false{
+    //Кузов поднят
+    var trunkIsLiftedUp : Bool = false{
         didSet {
             print("Кузов \(oldValue ? "опущен" : "поднят")")
         }
     }
     
+    //Переопределим метод действий с автомобилем
     override func executeCarAction(action: Actions) {
         
+        //Вызовем родительский метод
         super .executeCarAction(action: action)
         
         switch action{
 
         case let .trunkAction(liftUp) :
-           
-            guard self .trunkLiftedUp != liftUp  else { print("Кузов уже \(self .trunkLiftedUp ? "поднят" : "опущен")"); return }
+            //Проверим если кузов уже поднят выведем ошибку
+            guard self .trunkIsLiftedUp != liftUp  else { print("Кузов уже \(self .trunkIsLiftedUp ? "поднят" : "опущен")"); return }
 
-            self .trunkLiftedUp = liftUp
+            self .trunkIsLiftedUp = liftUp
 
         default :
            return
         }
     }
     
+    //Переопределим конструктор на основе производителя
     override init (manufacturer : Manufacturer){
         switch manufacturer {
         case .toyota:
@@ -145,25 +160,149 @@ class TrunkCar : Car {
         case .honda:
            wheelsCount  = 6
         }
+        //Вызовем родительский конструктор
         super .init(manufacturer: manufacturer)
     }
     
+    //Переопределим функцию вывода свойств и состояний автомобиля
     override func printCarValues() {
         
         print("Данные грузового автомобиля:")
         print("     Производитель: \(manufacturer.rawValue); Год выпуска: \(modelYear); Максимальный объем кузова: \(trunkMaxCapacity); Количество колес: \(wheelsCount)")
         print("Состояние автомобиля:")
-        print("     Двигатель \(engineOn ? "запущен" : "заглушен"); Окна \(windowsAreOpen ? "открыты" : "закрыты"); Кузов заполнен на: \(trunkCurrentCapasity); Кузов \(trunkLiftedUp ? "поднят" : "опущен")")
+        print("     Двигатель \(engineOn ? "запущен" : "заглушен"); Окна \(windowsAreOpen ? "открыты" : "закрыты"); Кузов заполнен на: \(trunkCurrentCapasity); Кузов \(trunkIsLiftedUp ? "поднят" : "опущен")")
         
     }
 }
 
-var truck = TrunkCar(manufacturer: .ford)
-truck.printCarValues()
-truck.executeCarAction(action: .trunkAction())
-truck.executeCarAction(action: .windowsAction())
-truck.executeCarAction(action: .cargoAction(cargoValue: 1000, load: true))
-print("1")
+//Создадим перечисление материалов люка спортивного автомобиля
+enum HatchMaterial : String{
+    case glass = "Стекло"
+    case carbon = "Углепластик"
+    case metal = "Металл"
+}
 
+//Создадим класс спортивный автомобиль - наследник класса автомобиль
+class SportCar : Car {
+    //Материал люка
+    let hatchMaterial : HatchMaterial
+    //Люк открыт
+    var hatchIsOpen : Bool = false{
+        didSet {
+            print("Люк \(oldValue ? "закрыт" : "открыт")")
+        }
+    }
+    //Турбо режим включен
+    var turboOn : Bool = false{
+        didSet {
+            print("Турбо режим \(oldValue ? "выключен" : "включен")")
+        }
+    }
+    
+    //Переопределим метод действий с автомобилем
+    override func executeCarAction(action: Actions) {
+        //Вызовем родительский метод
+        super .executeCarAction(action: action)
+        
+        switch action{
 
+        case let .hatchAction(open) :
+            //Проверим если люк уже открыт выведем ошибку
+            guard self .hatchIsOpen != open else { print("Люк уже \(self .hatchIsOpen ? "открыт" : "закрыт")"); return }
 
+            self .hatchIsOpen = open
+            
+        case let .turboAction(turnOn) :
+            //Проверим если турбо режим уже включен выведем ошибку
+            guard self .turboOn != turnOn else { print("Турбо режим уже \(self .turboOn ? "включен" : "выключен")"); return }
+
+            self .turboOn = turnOn
+
+        default :
+           return
+        }
+    }
+    
+    //Переопределим функцию вывода свойств и состояний автомобиля
+    override init (manufacturer : Manufacturer){
+        switch manufacturer {
+        case .toyota:
+            hatchMaterial = .glass
+        case .ford:
+            hatchMaterial = .metal
+        case .honda:
+            hatchMaterial = .carbon
+        }
+        super .init(manufacturer: manufacturer)
+    }
+    
+    //Переопределим функцию вывода свойств и состояний автомобиля
+    override func printCarValues() {
+        
+        print("Данные спортивного автомобиля:")
+        print("     Производитель: \(manufacturer.rawValue); Год выпуска: \(modelYear); Максимальный объем багажника: \(trunkMaxCapacity); Материал люка: \(hatchMaterial.rawValue)")
+        print("Состояние автомобиля:")
+        print("     Двигатель \(engineOn ? "запущен" : "заглушен"); Окна \(windowsAreOpen ? "открыты" : "закрыты"); Багажник заполнен на: \(trunkCurrentCapasity); Турбо режим \(turboOn ? "включен" : "выключен"); Люк \(hatchIsOpen ? "открыт" : "закрыт")")
+        
+    }
+    
+}
+
+//Создадим переменную класса грузовой автомобиль
+var fordTruck = TrunkCar(manufacturer: .ford)
+//Выведем значение свойств грузовика
+fordTruck.printCarValues()
+//Поднимем опустим кузов
+fordTruck.executeCarAction(action: .trunkAction())
+fordTruck.executeCarAction(action: .trunkAction())
+fordTruck.executeCarAction(action: .trunkAction(liftUp: false))
+//Опустим окна
+fordTruck.executeCarAction(action: .windowsAction())
+//Загрузим и разгрузим груз
+fordTruck.executeCarAction(action: .cargoAction(cargoValue: 110))
+fordTruck.executeCarAction(action: .cargoAction(cargoValue: 110, load: false))
+
+print()
+
+//Создадим еще одну переменную класса грузовой автомобиль
+var hondaTruck = TrunkCar(manufacturer: .honda)
+//Выведем значение свойств грузовика
+hondaTruck.printCarValues()
+//Запустим двигатель
+hondaTruck.executeCarAction(action: .engineAction())
+//Поднимем кузов
+hondaTruck.executeCarAction(action: .trunkAction())
+//Загрузим груз
+hondaTruck.executeCarAction(action: .cargoAction(cargoValue: 50))
+//Опустим кузов
+hondaTruck.executeCarAction(action: .trunkAction(liftUp: false))
+
+print()
+print("-----------------------------------------------------------------")
+
+//Создадим переменную класса спортивный автомобиль
+var hondaSport = SportCar(manufacturer: .honda)
+//Выведем значение свойств спортивного автомобиля
+hondaSport.printCarValues()
+//Откроем / закроем люк
+hondaSport.executeCarAction(action: .hatchAction())
+hondaSport.executeCarAction(action: .hatchAction(open: false))
+//Включим / выключим турбо режим
+hondaSport.executeCarAction(action: .turboAction())
+hondaSport.executeCarAction(action: .turboAction())
+hondaSport.executeCarAction(action: .turboAction(turnOn: false))
+//Опустим окна
+hondaSport.executeCarAction(action: .windowsAction())
+
+print()
+
+//Создадим еще одну переменную класса спортивный автомобиль
+var toyotaSport = SportCar(manufacturer: .toyota)
+//Выведем значение свойств спортивного автомобиля
+toyotaSport.printCarValues()
+//Откроем люк
+toyotaSport.executeCarAction(action: .hatchAction())
+//Откроем окна
+toyotaSport.executeCarAction(action: .windowsAction())
+//Запустим двигатель
+toyotaSport.executeCarAction(action: .engineAction())
