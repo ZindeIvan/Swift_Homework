@@ -108,7 +108,7 @@ struct GasStationFuel {
 //Класс заправочная станция
 class GasStation {
     //Хранилище топлива
-    let fuelStorage = [
+    var fuelStorage = [
         "Premium" : GasStationFuel(price: 0.44, value: 2000, fuelType: .premium),
         "Regular" : GasStationFuel(price: 0.38, value: 10, fuelType: .regular),
         "DF" : GasStationFuel(price: 0.46, value: 1000, fuelType: .diesel),
@@ -117,7 +117,7 @@ class GasStation {
     //Метод заправки автомобиля
     func fillTheCar(car: Car, money: Double, fuelValue: Double, fuelType: String) throws -> String{
         //Проверим есть ли данное топливо на станции, если нет - вернем ошибку
-        guard let fuel = fuelStorage[fuelType] else {
+        guard var fuel = fuelStorage[fuelType] else {
             throw GasStationErrors.invalideFuelType
         }
         //Проверим есть ли данное количество указанного топлива на станции, если нет - вернем ошибку
@@ -130,6 +130,9 @@ class GasStation {
         }
         //Вызовем метод заправки автомобиля данным типом топлива, в заданном количестве
         try car.fillUpCar(fuelValue: fuelValue, fuelType: fuel.fuelType)
+        //Уменьшим количество топлива в хранилище
+        fuel.value -= fuelValue
+        gasStation.fuelStorage[fuelType] = fuel
         //Вернем результат выполнения строкой
         return "Машина \(car.manufacturer.rawValue) заправлена топливом \(fuelType) на \(fuelValue) литров, сдача \(money - fuel.price * fuelValue)"
     }
