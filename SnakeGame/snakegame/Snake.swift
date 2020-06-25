@@ -29,6 +29,13 @@ class Snake: SKShapeNode {
         addChild(newBodyPart)
     }
     
+    func removeBody() {
+        for bodyPart in body {
+            bodyPart.removeFromParent()
+        }
+        body.removeAll()
+    }
+    
     func moveClockWise() {
         angle += CGFloat.pi / 2
     }

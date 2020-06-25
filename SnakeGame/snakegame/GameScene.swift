@@ -66,6 +66,19 @@ class GameScene: SKScene {
         addChild(button)
     }
     
+    private func showGameEnd() -> SKNode{
+        let gameEndLebel = SKLabelNode(text: "GAME OVER")
+        gameEndLebel.position = CGPoint(x: frame.midX, y: frame.midY)
+        gameEndLebel.name = "gameEndLabel"
+        gameEndLebel.fontColor = .red
+        addChild(gameEndLebel)
+        return gameEndLebel
+    }
+    
+    func wait(){
+        scene?.view?.isPaused = true
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch in touches {
@@ -121,6 +134,23 @@ extension GameScene: SKPhysicsContactDelegate {
             snake.addBodyPart()
             apple?.removeFromParent()
             createApple()
+        case CollisionCategories.EdgeBody :
+            let snake = contact.bodyA.node is SnakeHead ? contact.bodyA.node : contact.bodyB.node
+            snake?.removeFromParent()
+            self .snake.removeBody()
+            let gameEndLabel = showGameEnd()
+//            self .wait()
+            gameEndLabel.removeFromParent()
+            self .snake = Snake(position: CGPoint(x: frame.midX, y: frame.midY))
+            addChild(self .snake)
+            
+//        case CollisionCategories.Snake:
+//            guard contact.bodyA.node is SnakeHead || contact.bodyB.node is SnakeHead else {return }
+//            snake?.removeFromParent()
+//            self .snake.removeBody()
+//
+//            self .snake = Snake(position: CGPoint(x: frame.midX, y: frame.midY))
+//            addChild(self .snake)
         default:
             break
         }
