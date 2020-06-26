@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "GameScene.didBegin(_:):GameScene.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "contact.bodyA.node">
+            </PersistentString>
+            <PersistentString
+               value = "(bodyCount ?? 0) - 1">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Snake.move():Snake.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Snake.isNextToHead(bodyPart:):Snake.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self .body.firstIndex(of: bodyPart) == 1">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Snake.bodyCount():Snake.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self .body.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

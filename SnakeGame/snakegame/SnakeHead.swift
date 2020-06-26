@@ -12,8 +12,9 @@ class SnakeHead: SnakeBodyPart {
     override init(position: CGPoint) {
         super.init(position: position)
         
+        physicsBody = SKPhysicsBody(circleOfRadius: 10.0, center:CGPoint(x: 5, y: 5))
         physicsBody?.categoryBitMask = CollisionCategories.SnakeHead
-        physicsBody?.contactTestBitMask = CollisionCategories.EdgeBody | CollisionCategories.Apple | CollisionCategories.Snake
+        physicsBody?.contactTestBitMask = CollisionCategories.EdgeBody | CollisionCategories.Apple | CollisionCategories.SnakeBody
     }
     
     required init?(coder aDecoder: NSCoder) {
