@@ -11,6 +11,9 @@
             <PersistentString
                value = "(bodyCount ?? 0) - 1">
             </PersistentString>
+            <PersistentString
+               value = "self .snake?.isNextToHead(bodyPart: snakeBody as! SnakeBodyPart)">
+            </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
@@ -20,7 +23,10 @@
          contextName = "Snake.isNextToHead(bodyPart:):Snake.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self .body.firstIndex(of: bodyPart) == 1">
+               value = "body.firstIndex(of: bodyPart)  ??  0 == 1">
+            </PersistentString>
+            <PersistentString
+               value = "body.firstIndex(of: bodyPart)  ??  0 &lt;= 1">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

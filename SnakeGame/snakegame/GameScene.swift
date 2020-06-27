@@ -83,11 +83,6 @@ class GameScene: SKScene {
         addChild(label)
     }
     
-    
-    func wait(){
-        scene?.view?.isPaused = true
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch in touches {
@@ -108,11 +103,11 @@ class GameScene: SKScene {
             
             if touchedNode.name == clockWiseButtonName {
                 touchedNode.fillColor = .green
-                snake!.moveClockWise()
+                snake?.moveClockWise()
             }
             else if touchedNode.name == counterClockWiseButtonName {
                 touchedNode.fillColor = .green
-                snake!.moveCounterClockWise()
+                snake?.moveCounterClockWise()
             }
 
         }
@@ -163,12 +158,11 @@ extension GameScene: SKPhysicsContactDelegate {
             childNode(withName: appleName)?.removeFromParent()
             let bodyCount = self .snake!.bodyCount()
             self .snake!.removeBody()
-            self .snake = nil
             scene?.isPaused = true
             
             createLabel(name: gameEndLabelName, text: "GAME OVER", position: CGPoint(x: frame.midX, y: frame.midY), fontColor: .red)
             createLabel(name: scoreLabelName, text: "SCORE : \((bodyCount ?? 0) - 1)", position: CGPoint(x: frame.midX, y: frame.midY - 50), fontColor: .yellow)
-            createLabel(name: continueLabelName, text: "CONTINUE", position: CGPoint(x: frame.midX, y: frame.midY - 100), fontColor: .green)
+            createLabel(name: continueLabelName, text: "Tap here to continue", position: CGPoint(x: frame.midX, y: frame.midY - 100), fontColor: .green)
             
         default:
             break

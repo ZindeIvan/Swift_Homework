@@ -23,7 +23,7 @@ class Snake: SKShapeNode {
     }
     
     func bodyCount() -> Int?{
-       return self .body.count
+       return body.count
     }
     
     func addBodyPart() {
@@ -32,6 +32,7 @@ class Snake: SKShapeNode {
         
         addChild(newBodyPart)
     }
+    
     
     func removeBody() {
         for bodyPart in body {
